@@ -1,0 +1,24 @@
+{
+  "name": "schemas-api",
+  "description": "Project Template for Node JS developments",
+  "main": "index.js",
+  "authors": [{
+    "name": "ISA group",
+    "web": "http://www.isa.us.es/"
+  }],
+  "license": "GPL-3.0+",
+  "keywords": [
+    "RESTful",
+    "Schemas",
+    "JSON"
+  ],
+  "homepage": "https://github.com/i4Cloud/schemas-api",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components/",
+    "test",
+    "tests"
+  ]
+}

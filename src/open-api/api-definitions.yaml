@@ -1,0 +1,375 @@
+swagger: "2.0"
+
+info:
+  description: >-
+    This API permits us to manage JSON schemas of our applications, and also validate
+    JSON objects with them. To know how to define your schemas see 
+    <a href="http://json-schema.org/" target="_blank">JSON Schema docs</a>.
+  version: "1.0.0"
+  title: "Schema API"
+  contact:
+    email: "isagroup.us@gmail.com"
+  license:
+    name: "GPL-v3"
+    url: "https://www.gnu.org/licenses/gpl-3.0.en.html"
+    
+basePath: "/v1"
+
+tags:
+- name: "Application"
+  description: "Application that envolves a set of schemas"
+- name: "Schema"
+  description: "Everything about your schemas"
+
+schemes:
+- "http"
+produces:
+- "application/json"
+
+paths:
+  /applications:
+    post:
+      tags:
+      - "Application"
+      summary: "Add a new application to the store"
+      description: ""
+      operationId: "addApplication"
+      parameters:
+      - in: "body"
+        name: "newApplication"
+        description: "Application object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/newApplication"
+      responses:
+        200: 
+          description: "Application has been created"
+        400:
+          description: "Invalid input"
+    get:
+      tags:
+      - "Application"
+      summary: "Get all application from the store"
+      description: ""
+      operationId: "getApplications"
+      parameters: []
+      responses:
+        200: 
+          description: "Application has been created"
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Application'
+        400:
+          description: "Invalid input"
+
+  /applications/{appName}:
+    get:
+      tags:
+      - "Application"
+      summary: "Get an application from the store by appName"
+      description: ""
+      operationId: "getApplicationByAppName"
+      parameters:
+      - in: "path"
+        name: "appName"
+        description: "Application name that needs to search on the store"
+        required: true
+        type: string
+      responses:
+        200: 
+          description: "Application object"
+          schema:
+            $ref: '#/definitions/Application'
+        400:
+          description: "Invalid input"
+    put:
+      tags:
+      - "Application"
+      summary: "Update an application on the store by appName"
+      description: ""
+      operationId: "putApplicationByAppName"
+      parameters:
+      - in: "path"
+        name: "appName"
+        description: "Application name that needs to search on the store"
+        required: true
+        type: string
+      - in: "body"
+        name: "application"
+        description: "Application fields that needs to update on the store"
+        required: true
+        schema: 
+          $ref: "#/definitions/newApplication"
+      responses:
+        200: 
+          description: "Application has been updated"
+        400:
+          description: "Invalid input"
+    delete:
+      tags:
+      - "Application"
+      summary: "Delete an application from the store by name"
+      description: ""
+      operationId: "deleteApplicationByName"
+      parameters:
+      - in: "path"
+        name: "appName"
+        description: "Application name that needs to delete it on the store"
+        required: true
+        type: string
+      responses:
+        200: 
+          description: "Application has been deleted"
+        400:
+          description: "Invalid input"
+          
+  
+  /applications/{appName}/schemas:
+    get:
+      tags:
+      - "Schema"
+      summary: "Get all schemas from an application"
+      description: ""
+      operationId: "getApplicationSchemas"
+      parameters:
+      - in: "path"
+        name: "appName"
+        description: "Application name that needs to search on the store"
+        required: true
+        type: string
+      responses:
+        200: 
+          description: "List of schema links"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SchemaLink'
+        400:
+          description: "Invalid input"
+    post:
+      tags:
+      - "Schema"
+      summary: "Create new schemas for an application"
+      description: ""
+      operationId: "createApplicationSchema"
+      parameters:
+      - in: "path"
+        name: "appName"
+        description: "Application name that needs to search on the store"
+        required: true
+        type: string
+      - in: "body"
+        name: "schema"
+        description: "Schema that needs to save on the store"
+        required: true
+        schema:
+          $ref: '#/definitions/newSchema'
+      responses:
+        200: 
+          description: "Schema has been created"
+        400:
+          description: "Invalid input"
+  
+  
+  /applications/{appName}/schemas/{schemaName}:
+    get:
+      tags:
+      - "Schema"
+      summary: "Get an schema from an application by schemaName"
+      description: ""
+      operationId: "getApplicationSchemaByName"
+      parameters:
+      - in: "path"
+        name: "appName"
+        description: "Application name that needs to search on the store"
+        required: true
+        type: string
+      - in: "path"
+        name: "schemaName"
+        description: "Name of schema that needs to search on the store"
+        required: true
+        type: string
+      - in: "query"
+        name: "version"
+        description: "Date of version that is required to use '?version=2017-01-30'"
+        required: false
+        type: string
+      responses:
+        200: 
+          description: "Schema Object"
+          schema:
+            $ref: '#/definitions/SchemaObject'
+        400:
+          description: "Invalid input"
+    put:
+      tags:
+      - "Schema"
+      summary: "Update an schema from an application by schemaName"
+      description: ""
+      operationId: "updateApplicationSchemaByName"
+      parameters:
+      - in: "path"
+        name: "appName"
+        description: "Application name that needs to search on the store"
+        required: true
+        type: string
+      - in: "path"
+        name: "schemaName"
+        description: "Name of schema that needs to search on the store"
+        required: true
+        type: string
+      - in: "body"
+        name: "schemaObject"
+        description: "Schema Object that needs to update on the store"
+        required: true
+        schema:
+          $ref: '#/definitions/SchemaObject'
+      responses:
+        200: 
+          description: "Schema has been updated"
+        400:
+          description: "Invalid input" 
+    delete:
+      tags:
+      - "Schema"
+      summary: "Delete an schema from an application by schemaName"
+      description: ""
+      operationId: "deleteApplicationSchemaByName"
+      parameters:
+      - in: "path"
+        name: "appName"
+        description: "Application name that needs to search on the store"
+        required: true
+        type: string
+      - in: "path"
+        name: "schemaName"
+        description: "Name of schema that needs to search on the store"
+        required: true
+        type: string
+      responses:
+        200: 
+          description: "Schema has been deleted"
+        400:
+          description: "Invalid input"      
+  
+  
+  /applications/{appName}/schemas/{schemaName}/versions:
+    get:
+      tags:
+      - "Schema"
+      summary: "Get the versions of an schema from an application by schemaName"
+      operationId: "getApplicationSchemaVersionsByName"
+      parameters:
+      - in: "path"
+        name: "appName"
+        description: "Application name that needs to search on the store"
+        required: true
+        type: string
+      - in: "path"
+        name: "schemaName"
+        description: "Name of schema that needs to search on the store"
+        required: true
+        type: string
+      responses:
+        200: 
+          description: "Versions Object"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/VersionObject'
+        400:
+          description: "Invalid input"
+  
+  
+  /applications/{appName}/schemas/{schemaName}/validate:
+    post:
+      tags:
+      - "Schema"
+      summary: "Validate an object with an schema"
+      operationId: "validateApplicationSchemaByName"
+      parameters:
+      - in: "path"
+        name: "appName"
+        description: "Application name that needs to search on the store"
+        required: true
+        type: string
+      - in: "path"
+        name: "schemaName"
+        description: "Name of schema that needs to search on the store"
+        required: true
+        type: string
+      - in: "body"
+        name: "object"
+        description: "Object that needs to validate with the schema"
+        required: true
+        schema:
+          $ref: '#/definitions/JSONObject'
+      - in: "query"
+        name: "version"
+        description: "Date of version that will be used to validate '?version=2017-01-30'"
+        required: false
+        type: string
+      responses:
+        200: 
+          description: "Validation Object"
+          schema:
+            $ref: '#/definitions/Validation'
+        400:
+          description: "Invalid input"
+          
+
+definitions:
+  Validation:
+    type: object
+    properties:
+      validate:
+        type: boolean
+      message:
+        type: string
+        
+  JSONObject:
+    type: object
+    
+  VersionObject:
+    type: object
+    properties:
+      date: 
+        type: string
+      link:
+        type: string
+      
+  SchemaObject:
+    type: 'object'
+    
+  newSchema:
+    type: 'object'
+    properties:
+      name:
+        type: string
+      schemaObject:
+        type: object
+        description: Schema object
+        
+  SchemaLink:
+    type: 'object'
+    properties:
+      name: 
+        type: string
+      link:
+        type: string
+        
+  newApplication:
+    type: 'object'
+    properties:
+      name:
+        type: "string"
+  Application:
+    type: 'object'
+    properties:
+      "_id":
+        type: "string"
+      name:
+        type: "string"
+      schemas:
+        type: "string"
